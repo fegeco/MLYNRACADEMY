@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MLYNR Academy — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --border: #222222;
+    --accent: #c8f135;
+    --text: #f0f0f0;
+    --muted: #666;
+    --danger: #ff4444;
+    --success: #22c55e;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+  /* LOGIN */
+  #login-page {
+    min-height:100vh; display:flex; align-items:center; justify-content:center; padding:2rem;
+  }
+  .login-card {
+    background:var(--surface); border:1px solid var(--border); border-radius:20px;
+    padding:2.5rem; width:100%; max-width:380px; text-align:center;
+  }
+  .login-title { font-family:'Syne',sans-serif; font-size:1.5rem; font-weight:800; margin-bottom:0.5rem; }
+  .login-sub { color:var(--muted); font-size:0.85rem; margin-bottom:2rem; }
+  .login-input {
+    width:100%; background:var(--surface2); border:1px solid var(--border);
+    border-radius:10px; padding:12px 16px; color:var(--text);
+    font-family:'DM Sans',sans-serif; font-size:0.95rem; outline:none;
+    transition:border-color 0.2s; margin-bottom:1rem;
+  }
+  .login-input:focus { border-color:var(--accent); }
+  .btn-login {
+    width:100%; background:var(--accent); color:#000; border:none;
+    border-radius:10px; padding:12px; font-family:'Syne',sans-serif;
+    font-weight:700; cursor:pointer; font-size:0.95rem;
+    transition:all 0.2s;
+  }
+  .btn-login:hover { background:#d4ff40; }
+
+  /* ADMIN */
+  #admin-page { display:none; }
+
+  .topbar {
+    padding:1rem 2rem; border-bottom:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .topbar-logo { font-family:'Syne',sans-serif; font-weight:800; }
+  .topbar-logo span { color:var(--accent); }
+  .topbar-tag {
+    background:rgba(200,241,53,0.1); color:var(--accent);
+    border:1px solid rgba(200,241,53,0.2); border-radius:6px;
+    padding:3px 10px; font-size:0.72rem; font-weight:700;
+    text-transform:uppercase; letter-spacing:0.08em;
+  }
+  .logout-btn {
+    background:transparent; border:1px solid var(--border);
+    color:var(--muted); border-radius:8px; padding:6px 14px;
+    font-size:0.8rem; cursor:pointer; transition:all 0.2s;
+  }
+  .logout-btn:hover { border-color:var(--danger); color:var(--danger); }
+
+  .admin-content { max-width:1000px; margin:0 auto; padding:2rem; }
+
+  /* Stats */
+  .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:1rem; margin-bottom:2rem; }
+  .stat-card {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:14px; padding:1.25rem;
+  }
+  .stat-label { font-size:0.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.5rem; }
+  .stat-value { font-family:'Syne',sans-serif; font-size:2rem; font-weight:800; }
+  .stat-value.accent { color:var(--accent); }
+
+  /* Section */
+  .section-header {
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:1rem;
+  }
+  .section-title {
+    font-family:'Syne',sans-serif; font-size:1rem; font-weight:700;
+  }
+
+  /* Table */
+  .table-wrap {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:14px; overflow:hidden; margin-bottom:2rem;
+  }
+  .table-search {
+    padding:1rem; border-bottom:1px solid var(--border);
+    display:flex; gap:0.75rem;
+  }
+  .search-input {
+    flex:1; background:var(--surface2); border:1px solid var(--border);
+    border-radius:8px; padding:8px 14px; color:var(--text);
+    font-family:'DM Sans',sans-serif; font-size:0.85rem; outline:none;
+    transition:border-color 0.2s;
+  }
+  .search-input:focus { border-color:var(--accent); }
+
+  table { width:100%; border-collapse:collapse; }
+  th {
+    text-align:left; padding:10px 16px;
+    font-size:0.72rem; color:var(--muted);
+    text-transform:uppercase; letter-spacing:0.05em;
+    border-bottom:1px solid var(--border); font-weight:500;
+  }
+  td {
+    padding:12px 16px; font-size:0.875rem;
+    border-bottom:1px solid rgba(255,255,255,0.04);
+  }
+  tr:last-child td { border-bottom:none; }
+  tr:hover td { background:rgba(255,255,255,0.02); }
+
+  .badge-converted {
+    background:rgba(34,197,94,0.1); color:var(--success);
+    border:1px solid rgba(34,197,94,0.2); border-radius:100px;
+    padding:2px 8px; font-size:0.7rem; font-weight:600;
+  }
+  .badge-lead {
+    background:rgba(200,241,53,0.1); color:var(--accent);
+    border:1px solid rgba(200,241,53,0.2); border-radius:100px;
+    padding:2px 8px; font-size:0.7rem; font-weight:600;
+  }
+
+  /* Buttons */
+  .btn-sm {
+    border-radius:8px; padding:6px 14px; font-size:0.8rem;
+    font-weight:600; cursor:pointer; border:none; transition:all 0.2s;
+    font-family:'DM Sans',sans-serif;
+  }
+  .btn-accent { background:var(--accent); color:#000; }
+  .btn-accent:hover { background:#d4ff40; }
+  .btn-outline { background:transparent; border:1px solid var(--border); color:var(--text); }
+  .btn-outline:hover { border-color:var(--accent); color:var(--accent); }
+  .btn-danger { background:transparent; border:1px solid rgba(255,68,68,0.3); color:var(--danger); }
+  .btn-danger:hover { background:rgba(255,68,68,0.1); }
+
+  /* Mail & Announcement panels */
+  .panel {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:14px; padding:1.5rem; margin-bottom:2rem;
+  }
+  .panel-title {
+    font-family:'Syne',sans-serif; font-size:0.95rem; font-weight:700;
+    margin-bottom:1.25rem;
+  }
+  .form-row { margin-bottom:1rem; }
+  .form-row label { display:block; font-size:0.75rem; color:var(--muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em; }
+  .form-row input, .form-row textarea, .form-row select {
+    width:100%; background:var(--surface2); border:1px solid var(--border);
+    border-radius:10px; padding:10px 14px; color:var(--text);
+    font-family:'DM Sans',sans-serif; font-size:0.9rem; outline:none;
+    transition:border-color 0.2s; resize:vertical;
+  }
+  .form-row input:focus, .form-row textarea:focus, .form-row select:focus { border-color:var(--accent); }
+  .form-row textarea { min-height:100px; }
+
+  /* Announcement list */
+  .ann-item {
+    padding:0.75rem; background:var(--surface2); border-radius:10px;
+    margin-bottom:0.5rem; display:flex; align-items:center; justify-content:space-between;
+  }
+  .ann-title-text { font-weight:600; font-size:0.85rem; margin-bottom:2px; }
+  .ann-body-text { font-size:0.78rem; color:var(--muted); }
+
+  /* Toast */
+  .toast {
+    position:fixed; bottom:2rem; left:50%;
+    transform:translateX(-50%) translateY(100px);
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:12px; padding:12px 20px; font-size:0.9rem;
+    z-index:200; transition:transform 0.3s; white-space:nowrap;
+  }
+  .toast.show { transform:translateX(-50%) translateY(0); }
+  .toast.success { border-color:var(--accent); color:var(--accent); }
+  .toast.error { border-color:var(--danger); color:var(--danger); }
+
+  .spinner {
+    width:16px; height:16px; border:2px solid rgba(0,0,0,0.3);
+    border-top-color:#000; border-radius:50%;
+    animation:spin 0.8s linear infinite; display:inline-block;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  @media(max-width:600px) {
+    .admin-content { padding:1rem; }
+    .stats-grid { grid-template-columns:1fr 1fr; }
+    th:nth-child(3), td:nth-child(3),
+    th:nth-child(4), td:nth-child(4) { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-page">
+  <div class="login-card">
+    <div style="font-size:2rem;margin-bottom:1rem;">🔐</div>
+    <h2 class="login-title">Academy Admin</h2>
+    <p class="login-sub">Sadece yetkili ekip erişebilir</p>
+    <input type="password" class="login-input" id="admin-pass" placeholder="Admin şifresi" onkeydown="if(event.key==='Enter')checkLogin()">
+    <button class="btn-login" onclick="checkLogin()">Giriş Yap</button>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="admin-page">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="topbar-logo">MLYNR <span>Academy</span></div>
+      <span class="topbar-tag">Admin</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <span style="font-size:0.8rem;color:var(--muted)" id="admin-email-display"></span>
+      <button class="logout-btn" onclick="logout()">Çıkış</button>
+    </div>
+  </div>
+
+  <div class="admin-content">
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Toplam Kayıt</div>
+        <div class="stat-value accent" id="stat-total">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Bu Hafta</div>
+        <div class="stat-value" id="stat-week">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Dönüşüm</div>
+        <div class="stat-value" id="stat-converted">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Bugün</div>
+        <div class="stat-value" id="stat-today">—</div>
+      </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="section-header">
+      <div class="section-title">👥 Kullanıcılar</div>
+      <button class="btn-sm btn-accent" onclick="sendBulkMail()">📧 Toplu Mail Gönder</button>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-search">
+        <input type="text" class="search-input" id="search-input" placeholder="İsim veya e-posta ara..." oninput="filterUsers()">
+        <button class="btn-sm btn-outline" onclick="exportCSV()">⬇ CSV</button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Ad Soyad</th>
+              <th>E-posta</th>
+              <th>Telefon</th>
+              <th>Kayıt Tarihi</th>
+              <th>Durum</th>
+              <th>İşlem</th>
+            </tr>
+          </thead>
+          <tbody id="users-table-body">
+            <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem;">Yükleniyor...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Mail Gönder -->
+    <div class="panel">
+      <div class="panel-title">📧 Mail Gönder</div>
+      <div class="form-row">
+        <label>Alıcı</label>
+        <select id="mail-target">
+          <option value="all">Tüm kullanıcılar</option>
+          <option value="leads">Sadece leads (satın almayanlar)</option>
+          <option value="converted">Sadece dönüşenler</option>
+          <option value="single">Tek kişi (e-posta gir)</option>
+        </select>
+      </div>
+      <div class="form-row" id="single-email-row" style="display:none;">
+        <label>E-posta adresi</label>
+        <input type="email" id="single-email" placeholder="ornek@gmail.com">
+      </div>
+      <div class="form-row">
+        <label>Konu</label>
+        <input type="text" id="mail-subject" placeholder="Mail konusu">
+      </div>
+      <div class="form-row">
+        <label>İçerik</label>
+        <textarea id="mail-body" placeholder="Mail içeriği (HTML destekler)..."></textarea>
+      </div>
+      <button class="btn-sm btn-accent" id="send-mail-btn" onclick="sendMail()">Gönder</button>
+    </div>
+
+    <!-- Duyuru -->
+    <div class="panel">
+      <div class="panel-title">📢 Duyuru Yayınla</div>
+      <div class="form-row">
+        <label>Başlık</label>
+        <input type="text" id="ann-title" placeholder="Duyuru başlığı">
+      </div>
+      <div class="form-row">
+        <label>Mesaj</label>
+        <textarea id="ann-message" placeholder="Duyuru metni..." style="min-height:70px;"></textarea>
+      </div>
+      <button class="btn-sm btn-accent" onclick="publishAnnouncement()">Yayınla</button>
+    </div>
+
+    <!-- Mevcut Duyurular -->
+    <div class="section-header">
+      <div class="section-title">📋 Aktif Duyurular</div>
+    </div>
+    <div id="announcements-list" style="margin-bottom:2rem;">
+      <div style="color:var(--muted);font-size:0.85rem;">Yükleniyor...</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── CONFIG ──
+  const SUPABASE_URL = 'https://tfcpfhjkuprcqaojnmju.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmY3BmaGprdXByY3Fhb2pubWp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5MzA2NjUsImV4cCI6MjA5NjUwNjY2NX0.lOEf1kXIGCdyyJeb5kikNt9_ky7GfzXTEy8g6tVnNRM';
+  const EDGE_URL = `${SUPABASE_URL}/functions/v1/academy-endpoint`;
+  const ADMIN_PASS = 'ACADEMY2025ADMIN_SUPER_SECRET';
+
+  let allUsers = [];
+
+  // ── LOGIN ──
+  function checkLogin() {
+    const pass = document.getElementById('admin-pass').value;
+    if (pass === ADMIN_PASS) {
+      document.getElementById('login-page').style.display = 'none';
+      document.getElementById('admin-page').style.display = 'block';
+      loadDashboard();
+    } else {
+      showToast('Yanlış şifre!', 'error');
+    }
+  }
+
+  function logout() {
+    document.getElementById('login-page').style.display = 'flex';
+    document.getElementById('admin-page').style.display = 'none';
+    document.getElementById('admin-pass').value = '';
+  }
+
+  // ── LOAD ──
+  async function loadDashboard() {
+    await loadUsers();
+    await loadAnnouncements();
+  }
+
+  async function loadUsers() {
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/academy_users?order=created_at.desc`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+      });
+      allUsers = await res.json();
+      renderStats();
+      renderTable(allUsers);
+    } catch(e) {
+      showToast('Kullanıcılar yüklenemedi', 'error');
+    }
+  }
+
+  function renderStats() {
+    const total = allUsers.length;
+    const converted = allUsers.filter(u => u.converted).length;
+    const today = allUsers.filter(u => {
+      const d = new Date(u.created_at);
+      const now = new Date();
+      return d.toDateString() === now.toDateString();
+    }).length;
+    const weekAgo = new Date(); weekAgo.setDate(weekAgo.getDate() - 7);
+    const week = allUsers.filter(u => new Date(u.created_at) > weekAgo).length;
+
+    document.getElementById('stat-total').textContent = total;
+    document.getElementById('stat-converted').textContent = converted;
+    document.getElementById('stat-today').textContent = today;
+    document.getElementById('stat-week').textContent = week;
+  }
+
+  function renderTable(users) {
+    const tbody = document.getElementById('users-table-body');
+    if (!users.length) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem;">Henüz kullanıcı yok</td></tr>';
+      return;
+    }
+    tbody.innerHTML = users.map(u => `
+      <tr>
+        <td><strong>${u.full_name}</strong></td>
+        <td style="color:var(--muted)">${u.email}</td>
+        <td style="color:var(--muted)">${u.phone || '—'}</td>
+        <td style="color:var(--muted);font-size:0.8rem">${formatDate(u.created_at)}</td>
+        <td><span class="badge-${u.converted ? 'converted' : 'lead'}">${u.converted ? '✓ Müşteri' : 'Lead'}</span></td>
+        <td>
+          <div style="display:flex;gap:6px;">
+            <button class="btn-sm btn-outline" onclick="quickMail('${u.email}','${u.full_name}')">Mail</button>
+            ${!u.converted ? `<button class="btn-sm btn-accent" onclick="markConverted('${u.id}')">✓ Aldı</button>` : ''}
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterUsers() {
+    const q = document.getElementById('search-input').value.toLowerCase();
+    const filtered = allUsers.filter(u =>
+      u.full_name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)
+    );
+    renderTable(filtered);
+  }
+
+  // ── MARK CONVERTED ──
+  async function markConverted(id) {
+    try {
+      await fetch(`${SUPABASE_URL}/rest/v1/academy_users?id=eq.${id}`, {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({ converted: true })
+      });
+      showToast('Müşteri olarak işaretlendi ✓', 'success');
+      loadUsers();
+    } catch(e) { showToast('Hata oluştu', 'error'); }
+  }
+
+  // ── SEND MAIL ──
+  function quickMail(email, name) {
+    document.getElementById('mail-target').value = 'single';
+    document.getElementById('single-email-row').style.display = 'block';
+    document.getElementById('single-email').value = email;
+    document.getElementById('mail-subject').value = `${name}, seni bekliyoruz!`;
+    document.getElementById('mail-body').value = `Merhaba ${name.split(' ')[0]},\n\nMLYNR Academy'e katıldığın için teşekkürler. Sana özel bir fırsatımız var...`;
+    document.getElementById('mail-subject').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  document.getElementById('mail-target').addEventListener('change', function() {
+    document.getElementById('single-email-row').style.display =
+      this.value === 'single' ? 'block' : 'none';
+  });
+
+  async function sendMail() {
+    const target = document.getElementById('mail-target').value;
+    const subject = document.getElementById('mail-subject').value.trim();
+    const body = document.getElementById('mail-body').value.trim();
+
+    if (!subject || !body) return showToast('Konu ve içerik zorunlu!', 'error');
+
+    let recipients = [];
+    if (target === 'all') recipients = allUsers.map(u => ({ email: u.email, name: u.full_name }));
+    else if (target === 'leads') recipients = allUsers.filter(u => !u.converted).map(u => ({ email: u.email, name: u.full_name }));
+    else if (target === 'converted') recipients = allUsers.filter(u => u.converted).map(u => ({ email: u.email, name: u.full_name }));
+    else {
+      const single = document.getElementById('single-email').value.trim();
+      if (!single) return showToast('E-posta gir!', 'error');
+      recipients = [{ email: single, name: single }];
+    }
+
+    if (!recipients.length) return showToast('Gönderilecek kullanıcı yok!', 'error');
+
+    const btn = document.getElementById('send-mail-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner"></div>';
+
+    try {
+      const res = await fetch(EDGE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY },
+        body: JSON.stringify({ action: 'send-mail', recipients, subject, body })
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      showToast(`${recipients.length} kişiye mail gönderildi ✓`, 'success');
+    } catch(e) {
+      showToast('Mail gönderilemedi: ' + e.message, 'error');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = 'Gönder';
+    }
+  }
+
+  async function sendBulkMail() {
+    document.getElementById('mail-target').value = 'all';
+    document.getElementById('single-email-row').style.display = 'none';
+    document.getElementById('mail-subject').focus();
+    showToast('Alıcı: Tüm kullanıcılar seçildi', 'success');
+  }
+
+  // ── ANNOUNCEMENTS ──
+  async function publishAnnouncement() {
+    const title = document.getElementById('ann-title').value.trim();
+    const message = document.getElementById('ann-message').value.trim();
+    if (!title || !message) return showToast('Başlık ve mesaj zorunlu!', 'error');
+
+    try {
+      await fetch(`${SUPABASE_URL}/rest/v1/academy_announcements`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({ title, message, active: true })
+      });
+      showToast('Duyuru yayınlandı ✓', 'success');
+      document.getElementById('ann-title').value = '';
+      document.getElementById('ann-message').value = '';
+      loadAnnouncements();
+    } catch(e) { showToast('Hata oluştu', 'error'); }
+  }
+
+  async function loadAnnouncements() {
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/academy_announcements?order=created_at.desc&limit=5`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+      });
+      const data = await res.json();
+      const el = document.getElementById('announcements-list');
+      if (!data.length) { el.innerHTML = '<div style="color:var(--muted);font-size:0.85rem;">Henüz duyuru yok</div>'; return; }
+      el.innerHTML = data.map(a => `
+        <div class="ann-item">
+          <div>
+            <div class="ann-title-text">${a.title} ${a.active ? '<span style="color:var(--accent);font-size:0.7rem">● Aktif</span>' : ''}</div>
+            <div class="ann-body-text">${a.message}</div>
+          </div>
+          <button class="btn-sm btn-danger" onclick="deleteAnnouncement('${a.id}')">Sil</button>
+        </div>
+      `).join('');
+    } catch(e) {}
+  }
+
+  async function deleteAnnouncement(id) {
+    try {
+      await fetch(`${SUPABASE_URL}/rest/v1/academy_announcements?id=eq.${id}`, {
+        method: 'DELETE',
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+      });
+      showToast('Duyuru silindi', 'success');
+      loadAnnouncements();
+    } catch(e) { showToast('Hata', 'error'); }
+  }
+
+  // ── CSV EXPORT ──
+  function exportCSV() {
+    const headers = ['Ad Soyad', 'E-posta', 'Telefon', 'Kayıt Tarihi', 'Durum'];
+    const rows = allUsers.map(u => [
+      u.full_name, u.email, u.phone || '', formatDate(u.created_at),
+      u.converted ? 'Müşteri' : 'Lead'
+    ]);
+    const csv = [headers, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url;
+    a.download = `academy-users-${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+  }
+
+  // ── UTILS ──
+  function formatDate(iso) {
+    return new Date(iso).toLocaleDateString('tr-TR', { day:'2-digit', month:'short', year:'numeric' });
+  }
+
+  function showToast(msg, type = 'success') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `toast ${type} show`;
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+</script>
+</body>
+</html>

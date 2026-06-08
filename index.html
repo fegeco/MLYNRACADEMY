@@ -4,799 +4,580 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MLYNR Academy — Ücretsiz Başla</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0a0a;
-    --surface: #111111;
-    --surface2: #1a1a1a;
-    --border: #222222;
+    --bg: #080808;
+    --surface: #121212;
+    --surface2: #1c1c1c;
+    --border: #2a2a2a;
     --accent: #c8f135;
-    --accent2: #9ef;
-    --text: #f0f0f0;
-    --muted: #666;
-    --danger: #ff4444;
+    --text: #efefef;
+    --muted: #888;
+    --danger: #ff5555;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+  .bg-noise {
+    position:fixed; inset:0; opacity:0.025;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    pointer-events:none; z-index:0;
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* ── REGISTER PAGE ── */
+  /* ── REGISTER ── */
   #register-page {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    position: relative;
+    min-height:100vh; display:flex; position:relative; z-index:1;
   }
 
-  .bg-grid {
-    position: fixed;
-    inset: 0;
-    background-image: linear-gradient(rgba(200,241,53,0.03) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(200,241,53,0.03) 1px, transparent 1px);
-    background-size: 60px 60px;
-    pointer-events: none;
+  .reg-left {
+    flex:1; background:linear-gradient(135deg,#0f1a00,#080808);
+    display:flex; flex-direction:column; justify-content:center;
+    padding:4rem; position:relative; overflow:hidden;
   }
 
-  .bg-glow {
-    position: fixed;
-    top: -200px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(200,241,53,0.08) 0%, transparent 70%);
-    pointer-events: none;
+  .reg-left::before {
+    content:'';
+    position:absolute; bottom:-100px; left:-100px;
+    width:400px; height:400px;
+    background:radial-gradient(circle, rgba(200,241,53,0.12) 0%, transparent 70%);
   }
 
-  .register-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 24px;
-    padding: 3rem;
-    width: 100%;
-    max-width: 460px;
-    position: relative;
-    z-index: 1;
+  .reg-logo {
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:3rem;
   }
 
-  .logo-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(200,241,53,0.1);
-    border: 1px solid rgba(200,241,53,0.2);
-    border-radius: 100px;
-    padding: 6px 14px;
-    margin-bottom: 2rem;
-  }
-
-  .logo-dot {
-    width: 8px; height: 8px;
-    background: var(--accent);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
+  .reg-logo-dot {
+    width:10px; height:10px; background:var(--accent);
+    border-radius:50%; animation:pulse 2s infinite;
   }
 
   @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.8); }
+    0%,100%{opacity:1;transform:scale(1)}
+    50%{opacity:0.4;transform:scale(0.7)}
   }
 
-  .logo-text {
-    font-family: 'Syne', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--accent);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+  .reg-logo-text {
+    font-family:'Syne',sans-serif; font-weight:800;
+    font-size:1rem; letter-spacing:0.08em; text-transform:uppercase;
   }
 
-  .register-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 2rem;
-    font-weight: 800;
-    line-height: 1.1;
-    margin-bottom: 0.75rem;
+  .reg-logo-text span { color:var(--accent); }
+
+  .reg-headline {
+    font-family:'Syne',sans-serif;
+    font-size:clamp(2.2rem,4vw,3.2rem);
+    font-weight:800; line-height:1.05;
+    margin-bottom:1.5rem;
   }
 
-  .register-title span { color: var(--accent); }
+  .reg-headline em { color:var(--accent); font-style:normal; }
 
-  .register-sub {
-    color: var(--muted);
-    font-size: 0.95rem;
-    line-height: 1.6;
-    margin-bottom: 2rem;
+  .reg-desc {
+    color:var(--muted); font-size:1.05rem;
+    line-height:1.75; max-width:420px; margin-bottom:3rem;
   }
 
-  .form-group {
-    margin-bottom: 1rem;
+  .reg-features { display:flex; flex-direction:column; gap:1rem; }
+
+  .reg-feature {
+    display:flex; align-items:center; gap:12px;
+    font-size:0.9rem; color:#aaa;
   }
+
+  .reg-feature-icon {
+    width:32px; height:32px; background:rgba(200,241,53,0.08);
+    border:1px solid rgba(200,241,53,0.15); border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.85rem; flex-shrink:0;
+  }
+
+  .reg-right {
+    width:440px; background:var(--surface);
+    border-left:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    padding:3rem 2.5rem;
+  }
+
+  .reg-form { width:100%; }
+
+  .form-title {
+    font-family:'Syne',sans-serif; font-size:1.6rem;
+    font-weight:800; margin-bottom:0.4rem;
+  }
+
+  .form-sub { color:var(--muted); font-size:0.875rem; margin-bottom:2rem; line-height:1.5; }
+
+  .form-group { margin-bottom:1rem; }
 
   .form-group label {
-    display: block;
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--muted);
-    margin-bottom: 6px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    display:block; font-size:0.72rem; font-weight:600;
+    color:var(--muted); margin-bottom:7px;
+    text-transform:uppercase; letter-spacing:0.07em;
   }
 
   .form-group input {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 16px;
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.95rem;
-    transition: border-color 0.2s;
-    outline: none;
+    width:100%; background:var(--surface2);
+    border:1.5px solid var(--border); border-radius:10px;
+    padding:13px 16px; color:var(--text);
+    font-family:'Inter',sans-serif; font-size:0.95rem;
+    transition:border-color 0.2s, box-shadow 0.2s; outline:none;
   }
 
   .form-group input:focus {
-    border-color: var(--accent);
+    border-color:var(--accent);
+    box-shadow:0 0 0 3px rgba(200,241,53,0.08);
   }
 
-  .form-group input::placeholder { color: var(--muted); }
+  .form-group input::placeholder { color:#555; }
 
-  .btn-primary {
-    width: 100%;
-    background: var(--accent);
-    color: #000;
-    border: none;
-    border-radius: 10px;
-    padding: 14px;
-    font-family: 'Syne', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    cursor: pointer;
-    margin-top: 0.5rem;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+  .btn-register {
+    width:100%; background:var(--accent); color:#000;
+    border:none; border-radius:10px; padding:14px;
+    font-family:'Syne',sans-serif; font-weight:800;
+    font-size:0.95rem; cursor:pointer; margin-top:0.5rem;
+    transition:all 0.2s; display:flex;
+    align-items:center; justify-content:center; gap:8px;
   }
 
-  .btn-primary:hover { background: #d4ff40; transform: translateY(-1px); }
-  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .btn-register:hover { background:#d8ff45; transform:translateY(-1px); box-shadow:0 4px 20px rgba(200,241,53,0.25); }
+  .btn-register:disabled { opacity:0.5; cursor:not-allowed; transform:none; box-shadow:none; }
 
-  .trust-badges {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
-    flex-wrap: wrap;
+  .form-footer {
+    margin-top:1.5rem; display:flex; gap:1.25rem; flex-wrap:wrap;
   }
 
-  .trust-badge {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.78rem;
-    color: var(--muted);
+  .form-footer-item {
+    display:flex; align-items:center; gap:5px;
+    font-size:0.75rem; color:#555;
   }
 
-  .trust-badge svg { color: var(--accent); }
-
-  /* ── ANNOUNCEMENT BANNER ── */
-  #announcement-banner {
-    background: linear-gradient(90deg, rgba(200,241,53,0.1), rgba(200,241,53,0.05));
-    border-bottom: 1px solid rgba(200,241,53,0.15);
-    padding: 10px 2rem;
-    text-align: center;
-    font-size: 0.85rem;
-    display: none;
-  }
-
-  #announcement-banner span { color: var(--accent); font-weight: 600; }
+  .form-footer-item svg { color:var(--accent); }
 
   /* ── DASHBOARD ── */
-  #dashboard-page { display: none; }
+  #dashboard-page { display:none; }
+
+  #ann-bar {
+    display:none; padding:11px 2rem; text-align:center;
+    background:rgba(200,241,53,0.07); border-bottom:1px solid rgba(200,241,53,0.12);
+    font-size:0.82rem; color:#ccc;
+  }
+
+  #ann-bar strong { color:var(--accent); }
 
   .navbar {
-    padding: 1rem 2rem;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    padding:1rem 2.5rem; border-bottom:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between;
+    background:rgba(8,8,8,0.9); backdrop-filter:blur(12px);
+    position:sticky; top:0; z-index:50;
   }
 
-  .nav-logo {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 1.1rem;
+  .nav-brand {
+    font-family:'Syne',sans-serif; font-weight:800; font-size:1rem;
+    letter-spacing:0.05em;
   }
 
-  .nav-logo span { color: var(--accent); }
+  .nav-brand span { color:var(--accent); }
+
+  .nav-right { display:flex; align-items:center; gap:1rem; }
+
+  .nav-user { font-size:0.82rem; color:var(--muted); }
 
   .nav-cta {
-    background: var(--accent);
-    color: #000;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 18px;
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-decoration: none;
+    background:var(--accent); color:#000; border:none;
+    border-radius:8px; padding:8px 18px;
+    font-family:'Syne',sans-serif; font-weight:700;
+    font-size:0.82rem; cursor:pointer; transition:all 0.2s;
+    text-decoration:none; display:inline-block;
   }
 
-  .nav-cta:hover { background: #d4ff40; }
+  .nav-cta:hover { background:#d8ff45; }
 
-  .dashboard-content {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 2rem;
+  .dash-body { max-width:860px; margin:0 auto; padding:2.5rem 2rem; }
+
+  .dash-welcome {
+    margin-bottom:2.5rem;
   }
 
-  .welcome-section {
-    margin-bottom: 2.5rem;
+  .dash-welcome h2 {
+    font-family:'Syne',sans-serif; font-size:1.75rem; font-weight:800;
+    margin-bottom:0.4rem;
   }
 
-  .welcome-greeting {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.8rem;
-    font-weight: 800;
-    margin-bottom: 0.5rem;
+  .dash-welcome h2 span { color:var(--accent); }
+  .dash-welcome p { color:var(--muted); font-size:0.9rem; }
+
+  /* Progress */
+  .progress-card {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:16px; padding:1.5rem; margin-bottom:2rem;
   }
 
-  .welcome-greeting span { color: var(--accent); }
-
-  .welcome-sub {
-    color: var(--muted);
-    font-size: 0.95rem;
+  .progress-top {
+    display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;
   }
 
-  /* Progress bar */
-  .progress-section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
+  .progress-label { font-size:0.78rem; color:var(--muted); font-weight:500; text-transform:uppercase; letter-spacing:0.06em; }
+  .progress-pct { font-family:'Syne',sans-serif; font-weight:700; color:var(--accent); font-size:0.9rem; }
+
+  .progress-bar { height:5px; background:var(--surface2); border-radius:100px; overflow:hidden; }
+  .progress-fill { height:100%; background:var(--accent); border-radius:100px; width:22%; transition:width 1.2s ease; }
+
+  .progress-note { margin-top:0.9rem; font-size:0.82rem; color:var(--muted); }
+  .progress-note a { color:var(--accent); text-decoration:none; font-weight:600; }
+
+  /* Section */
+  .section-label {
+    font-size:0.72rem; font-weight:700; color:var(--muted);
+    text-transform:uppercase; letter-spacing:0.1em;
+    margin-bottom:0.875rem; display:flex; align-items:center; gap:8px;
   }
 
-  .progress-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
+  .section-label .pill {
+    background:rgba(200,241,53,0.08); color:var(--accent);
+    border:1px solid rgba(200,241,53,0.15);
+    border-radius:100px; padding:2px 9px; font-size:0.68rem;
   }
 
-  .progress-label {
-    font-size: 0.85rem;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+  /* Lesson */
+  .lessons { display:flex; flex-direction:column; gap:0.75rem; margin-bottom:2rem; }
+
+  .lesson {
+    background:var(--surface); border:1.5px solid var(--border);
+    border-radius:13px; padding:1.1rem 1.25rem;
+    display:flex; align-items:center; gap:1rem;
+    cursor:pointer; transition:all 0.2s;
   }
 
-  .progress-pct {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    color: var(--accent);
-  }
-
-  .progress-bar {
-    height: 6px;
-    background: var(--surface2);
-    border-radius: 100px;
-    overflow: hidden;
-  }
-
-  .progress-fill {
-    height: 100%;
-    background: var(--accent);
-    border-radius: 100px;
-    transition: width 1s ease;
-  }
-
-  .progress-cta {
-    margin-top: 1rem;
-    font-size: 0.85rem;
-    color: var(--muted);
-  }
-
-  .progress-cta a {
-    color: var(--accent);
-    text-decoration: none;
-    font-weight: 600;
-  }
-
-  /* Section title */
-  .section-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .section-tag {
-    background: rgba(200,241,53,0.1);
-    color: var(--accent);
-    font-size: 0.7rem;
-    padding: 2px 8px;
-    border-radius: 100px;
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 500;
-  }
-
-  /* Lesson cards */
-  .lessons-grid {
-    display: grid;
-    gap: 1rem;
-    margin-bottom: 2rem;
-  }
-
-  .lesson-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .lesson-card:hover:not(.locked) {
-    border-color: rgba(200,241,53,0.3);
-    transform: translateY(-1px);
-  }
-
-  .lesson-card.locked {
-    opacity: 0.5;
-    cursor: default;
-  }
-
-  .lesson-card.locked::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, transparent 60%, rgba(0,0,0,0.3));
-  }
+  .lesson:hover:not(.locked) { border-color:rgba(200,241,53,0.35); background:#141414; }
+  .lesson.locked { opacity:0.45; cursor:default; }
 
   .lesson-num {
-    width: 42px;
-    height: 42px;
-    background: var(--surface2);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 0.9rem;
-    flex-shrink: 0;
+    width:38px; height:38px; border-radius:9px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Syne',sans-serif; font-weight:800; font-size:0.8rem;
+    flex-shrink:0; background:var(--surface2); color:var(--muted);
   }
 
-  .lesson-card:not(.locked) .lesson-num {
-    background: rgba(200,241,53,0.1);
-    color: var(--accent);
+  .lesson:not(.locked) .lesson-num { background:rgba(200,241,53,0.1); color:var(--accent); }
+
+  .lesson-info { flex:1; min-width:0; }
+
+  .lesson-name {
+    font-weight:600; font-size:0.92rem; margin-bottom:3px;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
   }
 
-  .lesson-info { flex: 1; }
+  .lesson-meta { font-size:0.76rem; color:var(--muted); }
 
-  .lesson-title {
-    font-weight: 600;
-    font-size: 0.95rem;
-    margin-bottom: 3px;
+  .lesson-tag {
+    font-size:0.68rem; font-weight:700; padding:3px 10px;
+    border-radius:100px; flex-shrink:0;
   }
 
-  .lesson-meta {
-    font-size: 0.78rem;
-    color: var(--muted);
+  .tag-free { background:rgba(200,241,53,0.1); color:var(--accent); border:1px solid rgba(200,241,53,0.2); }
+  .tag-lock { background:rgba(255,255,255,0.04); color:#555; border:1px solid var(--border); }
+
+  /* CTA */
+  .cta-block {
+    background:linear-gradient(135deg,rgba(200,241,53,0.06),rgba(200,241,53,0.02));
+    border:1px solid rgba(200,241,53,0.15); border-radius:18px;
+    padding:2.5rem; text-align:center; margin-top:0.5rem;
   }
 
-  .lesson-badge {
-    font-size: 0.7rem;
-    padding: 3px 10px;
-    border-radius: 100px;
-    font-weight: 600;
+  .cta-block h3 {
+    font-family:'Syne',sans-serif; font-size:1.5rem; font-weight:800;
+    margin-bottom:0.75rem;
   }
 
-  .badge-free {
-    background: rgba(200,241,53,0.1);
-    color: var(--accent);
-    border: 1px solid rgba(200,241,53,0.2);
+  .cta-block h3 span { color:var(--accent); }
+
+  .cta-block p { color:var(--muted); font-size:0.9rem; line-height:1.7; margin-bottom:1.75rem; max-width:400px; margin-left:auto; margin-right:auto; }
+
+  .btn-cta {
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--accent); color:#000; text-decoration:none;
+    border-radius:11px; padding:13px 28px;
+    font-family:'Syne',sans-serif; font-weight:800; font-size:0.95rem;
+    transition:all 0.2s;
   }
 
-  .badge-locked {
-    background: rgba(255,255,255,0.05);
-    color: var(--muted);
-    border: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 4px;
+  .btn-cta:hover { background:#d8ff45; transform:translateY(-2px); box-shadow:0 8px 24px rgba(200,241,53,0.2); }
+
+  /* Modal */
+  .modal-wrap {
+    position:fixed; inset:0; background:rgba(0,0,0,0.85);
+    backdrop-filter:blur(10px); z-index:100;
+    display:none; align-items:center; justify-content:center; padding:2rem;
   }
 
-  /* CTA Banner */
-  .cta-banner {
-    background: linear-gradient(135deg, #1a1f0a, #111);
-    border: 1px solid rgba(200,241,53,0.2);
-    border-radius: 20px;
-    padding: 2rem;
-    text-align: center;
-    margin-top: 2rem;
-    position: relative;
-    overflow: hidden;
-  }
+  .modal-wrap.open { display:flex; }
 
-  .cta-banner::before {
-    content: '';
-    position: absolute;
-    top: -50px; right: -50px;
-    width: 200px; height: 200px;
-    background: radial-gradient(circle, rgba(200,241,53,0.1) 0%, transparent 70%);
-  }
-
-  .cta-banner-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 800;
-    margin-bottom: 0.75rem;
-  }
-
-  .cta-banner-title span { color: var(--accent); }
-
-  .cta-banner-sub {
-    color: var(--muted);
-    font-size: 0.9rem;
-    margin-bottom: 1.5rem;
-    max-width: 400px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .btn-cta-big {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--accent);
-    color: #000;
-    border: none;
-    border-radius: 12px;
-    padding: 14px 28px;
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-decoration: none;
-  }
-
-  .btn-cta-big:hover { background: #d4ff40; transform: translateY(-2px); }
-
-  /* Lesson Modal */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.8);
-    backdrop-filter: blur(8px);
-    z-index: 100;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-  }
-
-  .modal-overlay.active { display: flex; }
-
-  .modal {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 2rem;
-    width: 100%;
-    max-width: 640px;
-    max-height: 80vh;
-    overflow-y: auto;
-    position: relative;
+  .modal-box {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:18px; padding:2rem; width:100%; max-width:600px;
+    max-height:80vh; overflow-y:auto; position:relative;
   }
 
   .modal-close {
-    position: absolute;
-    top: 1rem; right: 1rem;
-    background: var(--surface2);
-    border: none;
-    border-radius: 8px;
-    width: 32px; height: 32px;
-    color: var(--text);
-    cursor: pointer;
-    font-size: 1.1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    position:absolute; top:1rem; right:1rem;
+    background:var(--surface2); border:none; border-radius:7px;
+    width:30px; height:30px; color:var(--muted);
+    cursor:pointer; font-size:1rem; display:flex;
+    align-items:center; justify-content:center;
   }
 
-  .modal-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.3rem;
-    font-weight: 800;
-    margin-bottom: 1rem;
-  }
+  .modal-title { font-family:'Syne',sans-serif; font-size:1.25rem; font-weight:800; margin-bottom:1.25rem; }
 
-  .modal-content {
-    color: var(--muted);
-    line-height: 1.8;
-    font-size: 0.95rem;
-  }
+  .modal-body { color:#aaa; line-height:1.8; font-size:0.92rem; }
+  .modal-body h4 { color:var(--text); font-family:'Syne',sans-serif; margin:1.25rem 0 0.5rem; font-size:0.92rem; }
+  .modal-body ul { padding-left:1.2rem; }
+  .modal-body li { margin-bottom:0.4rem; }
+  .modal-body strong { color:var(--text); }
 
-  .modal-content h4 {
-    color: var(--text);
-    font-family: 'Syne', sans-serif;
-    margin: 1rem 0 0.5rem;
-  }
-
-  .modal-content ul {
-    padding-left: 1.2rem;
-  }
-
-  .modal-content li {
-    margin-bottom: 0.5rem;
+  .modal-footer {
+    margin-top:1.5rem; padding-top:1.5rem;
+    border-top:1px solid var(--border); text-align:center;
   }
 
   /* Toast */
   .toast {
-    position: fixed;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 12px 20px;
-    font-size: 0.9rem;
-    z-index: 200;
-    transition: transform 0.3s;
-    white-space: nowrap;
+    position:fixed; bottom:2rem; left:50%;
+    transform:translateX(-50%) translateY(120px);
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:10px; padding:11px 20px; font-size:0.85rem;
+    z-index:200; transition:transform 0.3s ease;
   }
 
-  .toast.show { transform: translateX(-50%) translateY(0); }
-  .toast.success { border-color: var(--accent); color: var(--accent); }
-  .toast.error { border-color: var(--danger); color: var(--danger); }
+  .toast.show { transform:translateX(-50%) translateY(0); }
+  .toast.ok { border-color:var(--accent); color:var(--accent); }
+  .toast.err { border-color:var(--danger); color:var(--danger); }
 
-  /* Spinner */
-  .spinner {
-    width: 18px; height: 18px;
-    border: 2px solid rgba(0,0,0,0.3);
-    border-top-color: #000;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
+  .spin {
+    width:17px; height:17px; border:2px solid rgba(0,0,0,0.25);
+    border-top-color:#000; border-radius:50%;
+    animation:spin 0.7s linear infinite;
   }
 
-  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes spin { to { transform:rotate(360deg); } }
 
-  /* Mobile */
-  @media (max-width: 600px) {
-    .register-card { padding: 2rem 1.5rem; }
-    .dashboard-content { padding: 1rem; }
-    .register-title { font-size: 1.6rem; }
+  @media(max-width:800px) {
+    .reg-left { display:none; }
+    .reg-right { width:100%; border-left:none; padding:2rem 1.5rem; min-height:100vh; }
+    .dash-body { padding:1.5rem 1rem; }
+    .navbar { padding:1rem 1.25rem; }
+    .nav-user { display:none; }
   }
 </style>
 </head>
 <body>
+<div class="bg-noise"></div>
 
-<div class="bg-grid"></div>
-<div class="bg-glow"></div>
-
-<!-- ANNOUNCEMENT BANNER -->
-<div id="announcement-banner">
-  <span>📢</span> <span id="announcement-text"></span>
-</div>
-
-<!-- REGISTER PAGE -->
+<!-- REGISTER -->
 <div id="register-page">
-  <div class="register-card">
-    <div class="logo-badge">
-      <div class="logo-dot"></div>
-      <span class="logo-text">MLYNR Academy</span>
+  <div class="reg-left">
+    <div class="reg-logo">
+      <div class="reg-logo-dot"></div>
+      <div class="reg-logo-text">MLYNR <span>Academy</span></div>
     </div>
 
-    <h1 class="register-title">
-      E-ticaretin<br>
-      <span>sırrını öğren.</span>
+    <h1 class="reg-headline">
+      E-ticarette<br>
+      <em>gerçekten</em><br>
+      para kazanmak.
     </h1>
-    <p class="register-sub">
-      Ücretsiz içeriklere eriş, Türkiye'nin en iyi dropshipping topluluğuna katıl.
+
+    <p class="reg-desc">
+      Türkiye'nin önde gelen dropshipping eğitim platformu. eBay ve Shopify ile kendi işini kur — ücretsiz içeriklerle başla.
     </p>
 
-    <div class="form-group">
-      <label>Ad Soyad</label>
-      <input type="text" id="reg-name" placeholder="Adın ve soyadın">
-    </div>
-    <div class="form-group">
-      <label>E-posta</label>
-      <input type="email" id="reg-email" placeholder="ornek@gmail.com">
-    </div>
-    <div class="form-group">
-      <label>Telefon <span style="color:var(--muted);font-size:0.75rem">(isteğe bağlı)</span></label>
-      <input type="tel" id="reg-phone" placeholder="05xx xxx xx xx">
-    </div>
-
-    <button class="btn-primary" id="reg-btn" onclick="register()">
-      <span>Ücretsiz Başla</span>
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-    </button>
-
-    <div class="trust-badges">
-      <div class="trust-badge">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        Ücretsiz
+    <div class="reg-features">
+      <div class="reg-feature">
+        <div class="reg-feature-icon">📦</div>
+        <span>eBay & Shopify dropshipping metodolojisi</span>
       </div>
-      <div class="trust-badge">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        Spam yok
+      <div class="reg-feature">
+        <div class="reg-feature-icon">🎓</div>
+        <span>37+ video ders, AI destekli araçlar</span>
       </div>
-      <div class="trust-badge">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        İstediğin zaman çık
+      <div class="reg-feature">
+        <div class="reg-feature-icon">👥</div>
+        <span>Aktif Türk dropshipper topluluğu</span>
+      </div>
+      <div class="reg-feature">
+        <div class="reg-feature-icon">⚡</div>
+        <span>Canberk Öztürk ile birebir koçluk</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="reg-right">
+    <div class="reg-form">
+      <h2 class="form-title">Ücretsiz kaydol</h2>
+      <p class="form-sub">İlk dersine dakikalar içinde eriş. Kredi kartı gerekmez.</p>
+
+      <div class="form-group">
+        <label>Ad Soyad</label>
+        <input type="text" id="reg-name" placeholder="Adın ve soyadın">
+      </div>
+
+      <div class="form-group">
+        <label>E-posta adresi</label>
+        <input type="email" id="reg-email" placeholder="ornek@gmail.com">
+      </div>
+
+      <div class="form-group">
+        <label>Telefon <span style="color:#444;font-weight:400;text-transform:none;letter-spacing:0">(isteğe bağlı)</span></label>
+        <input type="tel" id="reg-phone" placeholder="05xx xxx xx xx">
+      </div>
+
+      <button class="btn-register" id="reg-btn" onclick="register()">
+        <span>Ücretsiz Başla</span>
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+
+      <div class="form-footer">
+        <div class="form-footer-item">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Tamamen ücretsiz
+        </div>
+        <div class="form-footer-item">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Spam yok
+        </div>
+        <div class="form-footer-item">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          İstediğin zaman çık
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- DASHBOARD PAGE -->
+<!-- DASHBOARD -->
 <div id="dashboard-page">
-  <div id="announcement-banner-dash" style="display:none; background:linear-gradient(90deg,rgba(200,241,53,0.1),rgba(200,241,53,0.05)); border-bottom:1px solid rgba(200,241,53,0.15); padding:10px 2rem; text-align:center; font-size:0.85rem;">
-    <span style="color:var(--accent);font-weight:600;">📢</span> <span id="ann-text-dash"></span>
-  </div>
+  <div id="ann-bar"><strong>📢</strong> <span id="ann-text"></span></div>
 
   <nav class="navbar">
-    <div class="nav-logo">MLYNR <span>Academy</span></div>
-    <a href="https://mlynrplan.com" class="nav-cta">🚀 Tam Eğitimi Al</a>
+    <div class="nav-brand">MLYNR <span>Academy</span></div>
+    <div class="nav-right">
+      <span class="nav-user" id="nav-user"></span>
+      <a href="https://mlynrplan.com" class="nav-cta">🚀 Tam Eğitimi Al</a>
+    </div>
   </nav>
 
-  <div class="dashboard-content">
-    <div class="welcome-section">
-      <h2 class="welcome-greeting">Merhaba, <span id="user-name-display">—</span> 👋</h2>
-      <p class="welcome-sub">Bugün bir şey öğrenmeye hazır mısın?</p>
+  <div class="dash-body">
+    <div class="dash-welcome">
+      <h2>Merhaba, <span id="user-first-name">—</span> 👋</h2>
+      <p>Bugün bir şey öğrenmeye hazır mısın? Sana özel içerikler seni bekliyor.</p>
     </div>
 
-    <!-- Progress -->
-    <div class="progress-section">
-      <div class="progress-header">
-        <span class="progress-label">İlerleme</span>
-        <span class="progress-pct">33%</span>
+    <div class="progress-card">
+      <div class="progress-top">
+        <span class="progress-label">Tamamlanan içerik</span>
+        <span class="progress-pct">22%</span>
       </div>
-      <div class="progress-bar">
-        <div class="progress-fill" style="width:33%"></div>
-      </div>
-      <p class="progress-cta">
-        Ücretsiz 2 ders tamamlandı. <a href="https://mlynrplan.com">Tam eğitimle devam et →</a>
-      </p>
+      <div class="progress-bar"><div class="progress-fill"></div></div>
+      <p class="progress-note">2 ücretsiz ders açık. <a href="https://mlynrplan.com">Tam eğitimle devam et →</a></p>
     </div>
 
-    <!-- Free Lessons -->
-    <div class="section-title">
-      Ücretsiz Dersler
-      <span class="section-tag">2 ders</span>
+    <div class="section-label">
+      Ücretsiz Dersler <span class="pill">2 ders açık</span>
     </div>
 
-    <div class="lessons-grid">
-      <div class="lesson-card" onclick="openLesson(1)">
+    <div class="lessons">
+      <div class="lesson" onclick="openLesson(1)">
         <div class="lesson-num">01</div>
         <div class="lesson-info">
-          <div class="lesson-title">Dropshipping nedir ve nasıl çalışır?</div>
-          <div class="lesson-meta">⏱ 8 dakika okuma</div>
+          <div class="lesson-name">Dropshipping nedir ve nasıl çalışır?</div>
+          <div class="lesson-meta">📖 8 dakika okuma · Başlangıç seviyesi</div>
         </div>
-        <span class="lesson-badge badge-free">ÜCRETSİZ</span>
+        <span class="lesson-tag tag-free">ÜCRETSİZ</span>
       </div>
 
-      <div class="lesson-card" onclick="openLesson(2)">
+      <div class="lesson" onclick="openLesson(2)">
         <div class="lesson-num">02</div>
         <div class="lesson-info">
-          <div class="lesson-title">İlk ürününü nasıl seçersin?</div>
-          <div class="lesson-meta">⏱ 12 dakika okuma</div>
+          <div class="lesson-name">İlk karlı ürününü nasıl seçersin?</div>
+          <div class="lesson-meta">📖 12 dakika okuma · Başlangıç seviyesi</div>
         </div>
-        <span class="lesson-badge badge-free">ÜCRETSİZ</span>
+        <span class="lesson-tag tag-free">ÜCRETSİZ</span>
       </div>
     </div>
 
-    <!-- Locked Lessons -->
-    <div class="section-title">
-      Tam Eğitim
-      <span class="section-tag">🔒 12+ ders</span>
+    <div class="section-label" style="margin-top:0.25rem;">
+      Premium İçerikler <span class="pill">🔒 12+ ders</span>
     </div>
 
-    <div class="lessons-grid">
-      <div class="lesson-card locked">
+    <div class="lessons">
+      <div class="lesson locked">
         <div class="lesson-num">03</div>
         <div class="lesson-info">
-          <div class="lesson-title">eBay mağaza kurulumu (adım adım)</div>
-          <div class="lesson-meta">⏱ 25 dakika video</div>
+          <div class="lesson-name">eBay mağaza kurulumu — adım adım</div>
+          <div class="lesson-meta">🎬 25 dakika video</div>
         </div>
-        <span class="lesson-badge badge-locked">🔒 Premium</span>
+        <span class="lesson-tag tag-lock">🔒 Premium</span>
       </div>
 
-      <div class="lesson-card locked">
+      <div class="lesson locked">
         <div class="lesson-num">04</div>
         <div class="lesson-info">
-          <div class="lesson-title">Tedarikçi bulma ve fiyatlama stratejisi</div>
-          <div class="lesson-meta">⏱ 20 dakika video</div>
+          <div class="lesson-name">Tedarikçi bulma ve fiyatlama stratejisi</div>
+          <div class="lesson-meta">🎬 20 dakika video</div>
         </div>
-        <span class="lesson-badge badge-locked">🔒 Premium</span>
+        <span class="lesson-tag tag-lock">🔒 Premium</span>
       </div>
 
-      <div class="lesson-card locked">
+      <div class="lesson locked">
         <div class="lesson-num">05</div>
         <div class="lesson-info">
-          <div class="lesson-title">Listing optimizasyonu ve SEO</div>
-          <div class="lesson-meta">⏱ 18 dakika video</div>
+          <div class="lesson-name">Listing optimizasyonu ve eBay SEO</div>
+          <div class="lesson-meta">🎬 18 dakika video</div>
         </div>
-        <span class="lesson-badge badge-locked">🔒 Premium</span>
+        <span class="lesson-tag tag-lock">🔒 Premium</span>
       </div>
 
-      <div class="lesson-card locked">
+      <div class="lesson locked">
         <div class="lesson-num">06+</div>
         <div class="lesson-info">
-          <div class="lesson-title">Ve daha fazlası...</div>
-          <div class="lesson-meta">Shopify, otomasyon, ölçekleme</div>
+          <div class="lesson-name">Shopify, otomasyon, ölçekleme ve çok daha fazlası</div>
+          <div class="lesson-meta">🎬 30+ video ders</div>
         </div>
-        <span class="lesson-badge badge-locked">🔒 Premium</span>
+        <span class="lesson-tag tag-lock">🔒 Premium</span>
       </div>
     </div>
 
-    <!-- CTA Banner -->
-    <div class="cta-banner">
-      <div class="cta-banner-title">
-        Hazır mısın? <span>Gerçekten başla.</span>
-      </div>
-      <p class="cta-banner-sub">
-        Tam eğitimle 4 haftada kendi eBay/Shopify işini kur. Canlı destek, AI araçlar ve topluluk dahil.
-      </p>
-      <a href="https://mlynrplan.com" class="btn-cta-big">
+    <div class="cta-block">
+      <h3>Hazır mısın? <span>Gerçekten başla.</span></h3>
+      <p>4 haftada kendi eBay ve Shopify işini kur. Canlı destek, AI araçlar ve aktif topluluk dahil.</p>
+      <a href="https://mlynrplan.com" class="btn-cta">
         🚀 Tam Eğitimi Keşfet
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
     </div>
   </div>
 </div>
 
-<!-- LESSON MODAL -->
-<div class="modal-overlay" id="lesson-modal">
-  <div class="modal">
+<!-- MODAL -->
+<div class="modal-wrap" id="modal">
+  <div class="modal-box">
     <button class="modal-close" onclick="closeModal()">✕</button>
     <h3 class="modal-title" id="modal-title"></h3>
-    <div class="modal-content" id="modal-body"></div>
-    <div style="margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid var(--border);">
-      <a href="https://mlynrplan.com" class="btn-cta-big" style="display:inline-flex;">
-        Devamını görmek için → Tam Eğitimi Al
-      </a>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer">
+      <a href="https://mlynrplan.com" class="btn-cta">Devamını görmek için Tam Eğitimi Al →</a>
     </div>
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-  // ── CONFIG ──
   const SUPABASE_URL = 'https://tfcpfhjkuprcqaojnmju.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmY3BmaGprdXByY3Fhb2pubWp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5MzA2NjUsImV4cCI6MjA5NjUwNjY2NX0.lOEf1kXIGCdyyJeb5kikNt9_ky7GfzXTEy8g6tVnNRM';
-  const EDGE_URL = `${SUPABASE_URL}/functions/v1/swift-service`;
 
-  // ── LESSONS DATA ──
-  const lessons = {
+  const LESSONS = {
     1: {
       title: 'Dropshipping nedir ve nasıl çalışır?',
       body: `
@@ -804,148 +585,131 @@
         <h4>Nasıl çalışır?</h4>
         <ul>
           <li>Müşteri senin mağazandan sipariş verir</li>
-          <li>Sen tedarikçiye iletir, farkı kazanırsın</li>
-          <li>Tedarikçi müşteriye gönderir</li>
-          <li>Sen sermaye riski almadan para kazanırsın</li>
+          <li>Sen tedarikçiye iletir, aradaki farkı kazanırsın</li>
+          <li>Tedarikçi doğrudan müşteriye gönderir</li>
+          <li>Sermaye riski olmadan iş kurarsın</li>
         </ul>
         <h4>Neden eBay ve Shopify?</h4>
-        <p>eBay milyonlarca aktif alıcıyla hazır bir pazar. Shopify ise kendi markanı kurmak için. MLYNR her ikisini de öğretiyor.</p>
-        <h4>Ne kadar kazanılır?</h4>
-        <p>Başlangıçta aylık 500–2000$ hedeflenebilir. Doğru sistem kurulunca bu kat kat büyür. Öğrencilerimizden ilk ayda 1500$ kazananlar var.</p>
+        <p>eBay milyonlarca aktif alıcıyla hazır bir pazar sunar. Shopify ise kendi markanı inşa etmek için en iyi platform. MLYNR, her ikisini de baştan sona öğretiyor.</p>
+        <h4>Gerçekçi kazanç beklentisi</h4>
+        <p>Başlangıçta aylık 500–2.000$ hedeflenebilir. Doğru sistem ve disiplinle bu rakamlar hızla katlanır. Öğrencilerimizden ilk ayda 1.500$+ kazananlar var.</p>
       `
     },
     2: {
-      title: 'İlk ürününü nasıl seçersin?',
+      title: 'İlk karlı ürününü nasıl seçersin?',
       body: `
-        <p>Ürün seçimi dropshipping'in en kritik adımı. Yanlış ürünle ne kadar çalışsan boşa gider.</p>
-        <h4>Karlı ürünün 4 özelliği</h4>
+        <p>Ürün seçimi dropshipping'in en kritik adımıdır. Yanlış ürünle ne kadar çalışsan sonuç değişmez.</p>
+        <h4>Karlı ürünün 4 temel özelliği</h4>
         <ul>
-          <li><strong>Hafif ve küçük:</strong> Kargo maliyeti düşük olsun</li>
-          <li><strong>Sorunsuz:</strong> Çok şikayet alan kategorilerden kaçın (elektronik gibi)</li>
-          <li><strong>Niş:</strong> Her yerde satılan ürünlerle rekabet zor</li>
-          <li><strong>Yeterli marj:</strong> En az %30 brüt kar hedefle</li>
+          <li><strong>Hafif ve küçük:</strong> Kargo maliyetini düşük tut</li>
+          <li><strong>Az şikayet:</strong> Elektronik gibi sorunlu kategorilerden kaçın</li>
+          <li><strong>Niş odaklı:</strong> Her yerde satılan ürünlerle rekabet etme</li>
+          <li><strong>Yeterli marj:</strong> Brüt %30+ hedefle</li>
         </ul>
-        <h4>Nereden bakacaksın?</h4>
-        <p>eBay Terapeak, Amazon Best Sellers, AliExpress trend ürünler. Tam araştırma metodolojisi eğitimin 3. dersinde.</p>
+        <h4>Nereden araştırırsın?</h4>
+        <p>eBay Terapeak, Amazon Best Sellers ve AliExpress trend ürünleri en iyi başlangıç noktalarıdır. Tam araştırma metodolojisi eğitimin 3. dersinde detaylı anlatılıyor.</p>
         <h4>Devamını öğrenmek ister misin?</h4>
         <p>Eğitimde 37 video ders, AI destekli araçlar ve Canberk'in birebir koçluğu seni bekliyor.</p>
       `
     }
   };
 
-  // ── STATE ──
   let currentUser = null;
 
-  // ── INIT ──
   window.addEventListener('load', () => {
     const saved = localStorage.getItem('academy_user');
-    if (saved) {
-      currentUser = JSON.parse(saved);
-      showDashboard();
-    }
-    loadAnnouncement();
+    if (saved) { currentUser = JSON.parse(saved); showDash(); }
+    loadAnn();
   });
 
-  // ── REGISTER ──
   async function register() {
     const name = document.getElementById('reg-name').value.trim();
     const email = document.getElementById('reg-email').value.trim();
     const phone = document.getElementById('reg-phone').value.trim();
 
-    if (!name || !email) return showToast('Ad ve e-posta zorunlu!', 'error');
-    if (!email.includes('@')) return showToast('Geçerli bir e-posta gir.', 'error');
+    if (!name) return toast('Adını gir.', 'err');
+    if (!email || !email.includes('@')) return toast('Geçerli bir e-posta gir.', 'err');
 
     const btn = document.getElementById('reg-btn');
     btn.disabled = true;
-    btn.innerHTML = '<div class="spinner"></div>';
+    btn.innerHTML = '<div class="spin"></div>';
 
     try {
-      const res = await fetch(EDGE_URL, {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/academy_users`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY },
-        body: JSON.stringify({ action: 'register', full_name: name, email, phone })
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({ full_name: name, email, phone: phone || null })
       });
 
-      const data = await res.json();
-
-      if (data.error) {
-        if (data.error.includes('duplicate') || data.error.includes('unique')) {
-          // Zaten kayıtlı, direkt giriş yap
-          currentUser = { full_name: name, email };
-          localStorage.setItem('academy_user', JSON.stringify(currentUser));
-          showDashboard();
-          showToast('Tekrar hoş geldin! 🎉', 'success');
-          return;
-        }
-        throw new Error(data.error);
+      if (res.status === 201) {
+        currentUser = { full_name: name, email };
+        localStorage.setItem('academy_user', JSON.stringify(currentUser));
+        showDash();
+        toast('Hoş geldin! 🎉', 'ok');
+      } else if (res.status === 409) {
+        currentUser = { full_name: name, email };
+        localStorage.setItem('academy_user', JSON.stringify(currentUser));
+        showDash();
+        toast('Tekrar hoş geldin! 👋', 'ok');
+      } else {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || `Hata: ${res.status}`);
       }
-
-      currentUser = { full_name: name, email };
-      localStorage.setItem('academy_user', JSON.stringify(currentUser));
-      showDashboard();
-      showToast('Hoş geldin! Kontrol et — mail geldi 📬', 'success');
-
-    } catch (e) {
-      showToast('Bir hata oluştu, tekrar dene.', 'error');
-      console.error(e);
+    } catch(e) {
+      toast('Bir hata oluştu: ' + e.message, 'err');
     } finally {
       btn.disabled = false;
-      btn.innerHTML = '<span>Ücretsiz Başla</span><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+      btn.innerHTML = '<span>Ücretsiz Başla</span><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
     }
   }
 
-  // ── DASHBOARD ──
-  function showDashboard() {
+  function showDash() {
     document.getElementById('register-page').style.display = 'none';
     document.getElementById('dashboard-page').style.display = 'block';
-    document.getElementById('user-name-display').textContent =
-      currentUser.full_name.split(' ')[0];
+    const first = currentUser.full_name.split(' ')[0];
+    document.getElementById('user-first-name').textContent = first;
+    document.getElementById('nav-user').textContent = currentUser.email;
   }
 
-  // ── ANNOUNCEMENT ──
-  async function loadAnnouncement() {
+  async function loadAnn() {
     try {
       const res = await fetch(`${SUPABASE_URL}/rest/v1/academy_announcements?active=eq.true&order=created_at.desc&limit=1`, {
         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
       });
       const data = await res.json();
-      if (data && data[0]) {
-        document.getElementById('ann-text-dash').textContent = `${data[0].title}: ${data[0].message}`;
-        document.getElementById('announcement-banner-dash').style.display = 'block';
+      if (data?.[0]) {
+        document.getElementById('ann-text').textContent = `${data[0].title}: ${data[0].message}`;
+        document.getElementById('ann-bar').style.display = 'block';
       }
     } catch(e) {}
   }
 
-  // ── LESSON MODAL ──
   function openLesson(id) {
-    const lesson = lessons[id];
-    if (!lesson) return;
-    document.getElementById('modal-title').textContent = lesson.title;
-    document.getElementById('modal-body').innerHTML = lesson.body;
-    document.getElementById('lesson-modal').classList.add('active');
+    const l = LESSONS[id];
+    if (!l) return;
+    document.getElementById('modal-title').textContent = l.title;
+    document.getElementById('modal-body').innerHTML = l.body;
+    document.getElementById('modal').classList.add('open');
   }
 
-  function closeModal() {
-    document.getElementById('lesson-modal').classList.remove('active');
-  }
+  function closeModal() { document.getElementById('modal').classList.remove('open'); }
 
-  document.getElementById('lesson-modal').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
-  });
+  document.getElementById('modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
 
-  // ── TOAST ──
-  function showToast(msg, type = 'success') {
+  function toast(msg, type) {
     const t = document.getElementById('toast');
     t.textContent = msg;
     t.className = `toast ${type} show`;
     setTimeout(() => t.classList.remove('show'), 3500);
   }
 
-  // Enter key
   document.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && document.getElementById('register-page').style.display !== 'none') {
-      register();
-    }
+    if (e.key === 'Enter' && document.getElementById('register-page').style.display !== 'none') register();
   });
 </script>
 </body>
